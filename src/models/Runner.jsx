@@ -3,7 +3,7 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 
 import runnerScene from '../assets/3d/robot_runner.glb';
 
-const Runner = ({ isRotating }) => {
+const Runner = ({ isRotating, ...props}) => {
   const ref = useRef();
   const { scene, animations } = useGLTF(runnerScene);
   const { actions } = useAnimations(animations, ref);
@@ -22,7 +22,7 @@ const Runner = ({ isRotating }) => {
 
   // Render the component only if isRotating is true
   return isRotating ? (
-    <mesh position={[-1, -1, -1]} scale={[0.005, 0.005, 0.005]} ref={ref}>
+    <mesh {...props} ref={ref}>
       <primitive object={scene} />
     </mesh>
   ) : null;

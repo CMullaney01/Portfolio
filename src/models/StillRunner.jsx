@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei';
 
 import stillRunnerScene from '../assets/3d/Robot-Still_Scaled.glb';
 
-const StillRunner = ({ isRotating }) => {
+const StillRunner = ({ isRotating, ...props }) => {
   // Render null if isRotating is true
   if (isRotating) {
     return null;
@@ -13,7 +13,7 @@ const StillRunner = ({ isRotating }) => {
 
   // Render the still runner without any animations
   return (
-    <mesh position={[-1, -1, -1]} scale={[0.005, 0.005, 0.005]}>
+    <mesh {...props}>
       <primitive object={scene} />
     </mesh>
   );
