@@ -11,7 +11,7 @@ import ObeliskCircle from './ObeliskCircle'; // Import the ObeliskCircle compone
 
 import islandScene from '../assets/3d/Background_noSurface.glb'
 
-const Island = ({ isRotating, setIsRotating, setCurrentStage, ...props })  => {
+const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskRotation, obeliskScale, obeliskRadius, ...props })  => {
     const islandRef = useRef();
     // Get access to the Three.js renderer and viewport
     const { gl, viewport } = useThree();
@@ -66,19 +66,20 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, ...props })  => {
         rotationSpeed.current = delta * 0.01 * Math.PI;
         }
     };
-
+    // Define a flag to indicate whether the rotation should continue
+    const isKeyPressed = useRef(false);
     // Handle keydown events
     const handleKeyDown = (event) => {
         if (event.key === "ArrowLeft") {
         if (!isRotating) setIsRotating(true);
 
         islandRef.current.rotation.y += 0.005 * Math.PI;
-        rotationSpeed.current = 0.007;
+        // rotationSpeed.current = 0.007;
         } else if (event.key === "ArrowRight") {
         if (!isRotating) setIsRotating(true);
 
         islandRef.current.rotation.y -= 0.005 * Math.PI;
-        rotationSpeed.current = -0.007;
+        // rotationSpeed.current = -0.007;
         }
     };
 
@@ -164,7 +165,7 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, ...props })  => {
         }
     });
     return (
-        <a.group ref = {islandRef} {...props}>
+        <a.group ref = {islandRef} position={position} {...props}>
         <mesh
             castShadow
             receiveShadow
@@ -209,7 +210,7 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, ...props })  => {
             scale={1.069}
         />
          {/* ObeliskCircle component */}
-         <ObeliskCircle center={[0, 0, 0]} radius={4} scale={[0.05,0.2,0.2]} isRotating={isRotating} />
+         <ObeliskCircle center={position} radius={obeliskRadius} scale={obeliskScale} isRotating={isRotating} initialRotation={obeliskRotation}/>
         </a.group>
     );
 }

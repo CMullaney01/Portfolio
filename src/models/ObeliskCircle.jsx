@@ -1,10 +1,10 @@
-import React from 'react';
-import { Clone } from '@react-three/drei';
-import { useGLTF } from '@react-three/drei';
+import React, { useEffect, useState } from 'react';
+import { Clone, useGLTF, Text } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
 
-const ObeliskCircle = ({ center, radius, scale, rotation}) => {
+const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
     const { scene: obeliskGLTF } = useGLTF(obeliskScene);
+    const [rotation, setRotation] = useState(initialRotation);
 
     if (typeof radius !== 'number' || radius <= 0 || isNaN(radius)) {
         console.error('Invalid radius for ObeliskCircle:', radius);
@@ -13,21 +13,73 @@ const ObeliskCircle = ({ center, radius, scale, rotation}) => {
 
     const numObelisks = 3;
     const obeliskComponents = [];
+    const textComponents = [];
 
     // Calculate the angle between each obelisk
     const angleStep = (2 * Math.PI) / numObelisks;
 
-    // Generate positions for each obelisk
+    useEffect(() => {
+        // Update rotation when initialRotation changes
+        setRotation(initialRotation);
+
+        // Make the material of the loaded GLTF model transparent
+        obeliskGLTF.traverse((child) => {
+            if (child.isMesh) {
+                child.material.transparent = true;
+                child.material.opacity = 0.5; // Set the opacity value here
+            }
+        });
+    }, [initialRotation, obeliskGLTF]);
+
+    // Calculate the initial rotation angle of the first obelisk
+    const initialRotationY = Math.atan2(rotation[2], rotation[0]);
+
+    // Generate positions and rotations for each obelisk
     for (let i = 0; i < numObelisks; i++) {
         const angle = i * angleStep;
-        const angleRadians = angle;
-        const x = center[0] + radius * Math.cos(angleRadians);
-        const z = center[2] + radius * Math.sin(angleRadians);
-        console.log(`Obelisk ${i + 1} position: [${x}, 0, ${z}]`); // Log positions
-        obeliskComponents.push(<Clone key={i} object={obeliskGLTF} position={[x, 0, z]} scale={scale} rotation={rotation} />);
+
+        // Calculate the position of the obelisk
+        const x = center[0] + radius * Math.cos(angle);
+        const z = center[2] + radius * Math.sin(angle) + 43;
+
+        // Calculate the position for the text component (an amount further away from the center)
+        const textOffset = 0.1; // Adjust the offset as needed
+        const textX = x + textOffset * Math.cos(angle);
+        const textZ = z + textOffset * Math.sin(angle);
+
+        // Calculate the rotation for the current obelisk
+        const rotationY = initialRotationY - angle;
+
+        obeliskComponents.push(
+            <group key={i}>
+                <Clone object={obeliskGLTF} position={[x, 2, z]} scale={scale} rotation={[0, rotationY, 0]} />
+            </group>
+        );
+
+        // Add text components
+        textComponents.push(
+            <Text
+                key={i}
+                scale={[0.5, 0.5, 0.5]} // Adjust the scale to make the text smaller
+                color="black"
+                anchorX="center"
+                anchorY="bottom"
+                position={[textX, 11, textZ]} // Adjust the y position to sit slightly above the obelisks
+                rotation={[0, rotationY + Math.PI / 2, 0]} // Reverse rotation and add Math.PI to align properly
+            >
+                Your Text
+            </Text>
+        );
     }
 
-    return <>{obeliskComponents}</>;
+    return (
+        <>
+            {/* Render the obelisk components */}
+            {obeliskComponents}
+            {/* Render the text components */}
+            {textComponents}
+        </>
+    );
 };
 
 export default ObeliskCircle;
