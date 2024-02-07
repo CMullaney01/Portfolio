@@ -6,6 +6,8 @@ import React, { useRef, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { a } from "@react-spring/three"
+import ObeliskCircle from './ObeliskCircle'; // Import the ObeliskCircle component
+
 
 import islandScene from '../assets/3d/Background_noSurface.glb'
 
@@ -206,6 +208,8 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, ...props })  => {
             rotation={[-1.206, 0.705, 1.038]}
             scale={1.069}
         />
+         {/* ObeliskCircle component */}
+         <ObeliskCircle center={[0, 0, 0]} radius={4} scale={[0.05,0.2,0.2]} isRotating={isRotating} />
         </a.group>
     );
 }

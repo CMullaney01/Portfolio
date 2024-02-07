@@ -38,9 +38,9 @@ const Home = () => {
         let rotation = [0.0, 1, 0]
 
         if (window.innerWidth < 768) {
-            screenScale = [0.03,0.1,0.1];
+            screenScale = [0.05,0.2,0.2];
         } else {
-            screenScale = [0.03,0.1,0.1];
+            screenScale = [0.05,0.2,0.2];
         }
         return [screenScale, rotation]
     }
@@ -58,7 +58,6 @@ const Home = () => {
                     {/* Add multiple obelisks */}
                     <Environment preset="night" background blur={0.5} />
                     <directionalLight position={[1,1,1]} intensity={2} />
-                    <ObeliskCircle center={islandPosition} scale={obeliskScale} rotation={obeliskRotation} radius={4}/>
                     <Runner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={runnerRotation}/>
                     <StillRunner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={[0.0, 0.4, 0]}/>
                     <Island position={islandPosition} scale={islandScale} rotation={islandRotation} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage}/>

@@ -3,7 +3,7 @@ import { Clone } from '@react-three/drei';
 import { useGLTF } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
 
-const ObeliskCircle = ({ center, radius, scale, rotation }) => {
+const ObeliskCircle = ({ center, radius, scale, rotation}) => {
     const { scene: obeliskGLTF } = useGLTF(obeliskScene);
 
     if (typeof radius !== 'number' || radius <= 0 || isNaN(radius)) {
