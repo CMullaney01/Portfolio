@@ -7,10 +7,52 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { a } from "@react-spring/three"
 import ObeliskCircle from './ObeliskCircle'; // Import the ObeliskCircle component
+import coast from '../assets/textures/coast_sand_rocks_02_diff_2k.jpg'
+import soil from '../assets/textures/excavated_soil_wall_diff_1k.jpg'
+import container from '../assets/textures/green_metal_rust_diff_1k.jpg'
+import fabric from '../assets/textures/splodges.png'
+import beachBall from '../assets/textures/BeachBallColor.jpg'
+import * as THREE from "three";
 
 
 import islandScene from '../assets/3d/Background_noSurface.glb'
 import { NightSky } from "./Stars";
+
+// Preload textures
+const textureCoast = new THREE.TextureLoader().load(coast);
+const textureSoil = new THREE.TextureLoader().load(soil);
+const textureContainer = new THREE.TextureLoader().load(container);
+const textureFabric = new THREE.TextureLoader().load(fabric);
+const textureBeachBall = new THREE.TextureLoader().load(beachBall);
+
+// Create materials using preloaded textures
+const beachBallMat = new THREE.MeshStandardMaterial({
+    map: textureBeachBall,
+    roughness: 0.2,
+    metalness: 0.1
+});
+const fabricMat = new THREE.MeshStandardMaterial({
+    map: textureFabric,
+    roughness: 0,
+    metalness: 1
+});
+const coastMat = new THREE.MeshStandardMaterial({
+    map: textureCoast,
+    roughness: 0.8,
+    metalness: 0
+});
+const soilMat = new THREE.MeshStandardMaterial({
+    map: textureSoil,
+    roughness: 0.7,
+    metalness: 1
+});
+
+const containerMat = new THREE.MeshStandardMaterial({
+    map: textureContainer,
+    roughness: 0.9,
+    metalness: 0.5
+});
+
 
 const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskRotation, obeliskScale, obeliskRadius, ...props })  => {
     const islandRef = useRef();
@@ -67,20 +109,19 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         rotationSpeed.current = delta * 0.01 * Math.PI;
         }
     };
-    // Define a flag to indicate whether the rotation should continue
-    const isKeyPressed = useRef(false);
+
     // Handle keydown events
     const handleKeyDown = (event) => {
         if (event.key === "ArrowLeft") {
         if (!isRotating) setIsRotating(true);
 
         islandRef.current.rotation.y += 0.005 * Math.PI;
-        // rotationSpeed.current = 0.007;
+        rotationSpeed.current = 0.0125;
         } else if (event.key === "ArrowRight") {
         if (!isRotating) setIsRotating(true);
 
         islandRef.current.rotation.y -= 0.005 * Math.PI;
-        // rotationSpeed.current = -0.007;
+        rotationSpeed.current = -0.0125;
         }
     };
 
@@ -111,67 +152,76 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
     }, [gl, handlePointerDown, handlePointerUp, handlePointerMove]);
 
     // This function is called on each frame update
+    const additionalRotation = 2 * Math.PI / 3;
+    const rotation0 = [0, 4.7, 0];
+    const rotation1 = [0,2.6,0]
+    const rotation2 = [0,0.5,0];
+    const rotations = [rotation0, rotation1, rotation2];
     useFrame(() => {
-        // If not rotating, apply damping to slow down the rotation (smoothly)
-        if (!isRotating) {
-        // Apply damping factor
-        rotationSpeed.current *= dampingFactor;
-
-        // Stop rotation when speed is very small
-        if (Math.abs(rotationSpeed.current) < 0.001) {
-            rotationSpeed.current = 0;
-        }
-
-        islandRef.current.rotation.y += rotationSpeed.current;
-        } else {
-        // When rotating, determine the current stage based on island's orientation
         const rotation = islandRef.current.rotation.y;
-
-        /**
-         * Normalize the rotation value to ensure it stays within the range [0, 2 * Math.PI].
-         * The goal is to ensure that the rotation value remains within a specific range to
-         * prevent potential issues with very large or negative rotation values.
-         *  Here's a step-by-step explanation of what this code does:
-         *  1. rotation % (2 * Math.PI) calculates the remainder of the rotation value when divided
-         *     by 2 * Math.PI. This essentially wraps the rotation value around once it reaches a
-         *     full circle (360 degrees) so that it stays within the range of 0 to 2 * Math.PI.
-         *  2. (rotation % (2 * Math.PI)) + 2 * Math.PI adds 2 * Math.PI to the result from step 1.
-         *     This is done to ensure that the value remains positive and within the range of
-         *     0 to 2 * Math.PI even if it was negative after the modulo operation in step 1.
-         *  3. Finally, ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) applies another
-         *     modulo operation to the value obtained in step 2. This step guarantees that the value
-         *     always stays within the range of 0 to 2 * Math.PI, which is equivalent to a full
-         *     circle in radians.
-         */
         const normalizedRotation =
             ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-
-        // Set the current stage based on the island's orientation
-        switch (true) {
-            case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
-            setCurrentStage(4);
-            break;
-            case normalizedRotation >= 0.85 && normalizedRotation <= 1.3:
-            setCurrentStage(3);
-            break;
-            case normalizedRotation >= 2.4 && normalizedRotation <= 2.6:
-            setCurrentStage(2);
-            break;
-            case normalizedRotation >= 4.25 && normalizedRotation <= 4.75:
-            setCurrentStage(1);
-            break;
-            default:
-            setCurrentStage(null);
-        }
+        
+        // If not rotating, apply damping to slow down the rotation (smoothly)
+        if (!isRotating) {
+            // Apply damping factor
+            rotationSpeed.current *= dampingFactor;
+    
+            // Stop rotation when speed is very small
+            if (Math.abs(rotationSpeed.current) < 0.001) {
+                let targetRotation;
+                rotationSpeed.current = 0;
+                let minDifference = Number.MAX_VALUE;
+                const currentRotation = normalizedRotation;
+                rotations.forEach(rot => {
+                    const difference = Math.abs(currentRotation - rot[1]);
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        targetRotation = rot[1];
+                    }
+                });
+    
+                // Smoothly transition to the nearest obelisk
+                let deltaRotation = targetRotation - currentRotation;
+                // Ensure we take the shortest path to the target rotation
+                if (deltaRotation > Math.PI) {
+                    deltaRotation -= 2 * Math.PI;
+                } else if (deltaRotation < -Math.PI) {
+                    deltaRotation += 2 * Math.PI;
+                }
+                const transitionSpeed = deltaRotation * dampingFactor * 0.1; // Adjust transition speed as needed
+                islandRef.current.rotation.y += transitionSpeed;
+            } else {
+                islandRef.current.rotation.y += rotationSpeed.current;
+            }
+        } else {
+            // Determine the current stage based on the island's orientation
+            switch (true) {
+                case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
+                    setCurrentStage(4);
+                    break;
+                case normalizedRotation >= 0.85 && normalizedRotation <= 1.3:
+                    setCurrentStage(3);
+                    break;
+                case normalizedRotation >= 2.4 && normalizedRotation <= 2.6:
+                    setCurrentStage(2);
+                    break;
+                case normalizedRotation >= 4.25 && normalizedRotation <= 4.75:
+                    setCurrentStage(1);
+                    break;
+                default:
+                    setCurrentStage(null);
+            }
         }
     });
+
     return (
         <a.group ref = {islandRef} position={position} {...props}>
         <mesh
             castShadow
             receiveShadow
             geometry={nodes.Cube001.geometry}
-            material={materials.Material}
+            material={soilMat}
             position={[0.939, 5.95, 0]}
             rotation={[0.327, -0.326, 0.671]}
             scale={[1, 3.201, 1]}
@@ -180,7 +230,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
             castShadow
             receiveShadow
             geometry={nodes.Torus.geometry}
-            material={nodes.Torus.material}
+            material={fabricMat}
             position={[0.939, 3.692, 0]}
             rotation={[-Math.PI, 0, -Math.PI]}
             scale={[3.515, 5.87, 3.515]}
@@ -189,7 +239,8 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
             castShadow
             receiveShadow
             geometry={nodes.Sphere001.geometry}
-            material={nodes.Sphere001.material}
+            // material={nodes.Sphere001.material}
+            material={beachBallMat}
             position={[-0.794, 15.814, 3.634]}
             scale={-3.473}
         />
@@ -197,7 +248,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
             castShadow
             receiveShadow
             geometry={nodes.Cylinder.geometry}
-            material={nodes.Cylinder.material}
+            material={coastMat}
             position={[3.77, 10.613, -0.948]}
             rotation={[-1.59, -0.682, -1.575]}
         />
@@ -205,14 +256,14 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
             castShadow
             receiveShadow
             geometry={nodes.Cone.geometry}
-            material={nodes.Cone.material}
+            material={fabricMat}
             position={[0.939, 12.96, -1.466]}
             rotation={[-1.206, 0.705, 1.038]}
             scale={1.069}
         />
          {/* ObeliskCircle component */}
          <ObeliskCircle center={position} radius={obeliskRadius} scale={obeliskScale} isRotating={isRotating} initialRotation={obeliskRotation}/>
-         <NightSky />
+         <NightSky numStars={200}/>
         </a.group>
     );
 }

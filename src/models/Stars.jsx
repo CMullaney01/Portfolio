@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -17,21 +17,33 @@ const Star = ({ position, color }) => {
     );
 };
 
-const NightSky = () => {
-    const numStars = 200;
-    const stars = [];
+const useStars = (numStars) => {
+    const stars = useRef([]);
 
-    // Generate random positions and colors for the stars
-    for (let i = 0; i < numStars; i++) {
-        const x = Math.random() * 40 - 20; // Random x position within range [-20, 20]
-        const y = Math.random() * 20 + 10; // Random y position within range [10, 30] (higher up)
-        const z = Math.random() * 40 - 20; // Random z position within range [-20, 20]
-        const color = new THREE.Color(0xffffff); // White color for now, can be adjusted
+    useEffect(() => {
+        for (let i = 0; i < numStars; i++) {
+            const x = Math.random() * 40 - 20; // Random x position within range [-20, 20]
+            const y = Math.random() * 20 + 10; // Random y position within range [10, 30] (higher up)
+            const z = Math.random() * 40 - 20; // Random z position within range [-20, 20]
+            const color = new THREE.Color(0xffffff); // White color for now, can be adjusted
 
-        stars.push(<Star key={i} position={[x, y, z]} color={color} />);
-    }
+            stars.current.push({ key: i, position: [x, y, z], color });
+        }
+    }, [numStars]);
 
-    return <>{stars}</>;
+    return stars.current;
+};
+
+const NightSky = ({ numStars }) => {
+    const stars = useStars(numStars);
+
+    return (
+        <>
+            {stars.map(star => (
+                <Star key={star.key} position={star.position} color={star.color} />
+            ))}
+        </>
+    );
 };
 
 export { Star, NightSky };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Clone, useGLTF, Text } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
+import * as THREE from 'three'
 
 const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
     const { scene: obeliskGLTF } = useGLTF(obeliskScene);
@@ -21,12 +22,19 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
     useEffect(() => {
         // Update rotation when initialRotation changes
         setRotation(initialRotation);
-
-        // Make the material of the loaded GLTF model transparent
+    
+        // Make the material of the loaded GLTF model transparent and glass-like
         obeliskGLTF.traverse((child) => {
             if (child.isMesh) {
                 child.material.transparent = true;
                 child.material.opacity = 0.5; // Set the opacity value here
+                child.material.reflectivity = 1; // Set the reflectivity to make it look like glass
+                child.material.refractionRatio = 0.98; // Set the refraction ratio for glass-like effect
+                child.material.envMapIntensity = 1; // Set environment map intensity
+                // Optionally, you can set other properties like color, roughness, etc. for a better glass effect
+                child.material.color = new THREE.Color(1, 1, 1); // Set color to white (optional)
+                child.material.roughness = 0.1; // Set roughness (optional)
+                child.material.metalness = 0.9; // Set metalness (optional)
             }
         });
     }, [initialRotation, obeliskGLTF]);
@@ -64,7 +72,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
                 color="black"
                 anchorX="center"
                 anchorY="bottom"
-                position={[textX, 11, textZ]} // Adjust the y position to sit slightly above the obelisks
+                position={[textX, 15 * scale[1], textZ]} // Adjust the y position to sit slightly above the obelisks
                 rotation={[0, rotationY + Math.PI / 2, 0]} // Reverse rotation and add Math.PI to align properly
             >
                 Your Text
