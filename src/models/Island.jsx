@@ -10,6 +10,7 @@ import ObeliskCircle from './ObeliskCircle'; // Import the ObeliskCircle compone
 
 
 import islandScene from '../assets/3d/Background_noSurface.glb'
+import { NightSky } from "./Stars";
 
 const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskRotation, obeliskScale, obeliskRadius, ...props })  => {
     const islandRef = useRef();
@@ -211,6 +212,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         />
          {/* ObeliskCircle component */}
          <ObeliskCircle center={position} radius={obeliskRadius} scale={obeliskScale} isRotating={isRotating} initialRotation={obeliskRotation}/>
+         <NightSky />
         </a.group>
     );
 }

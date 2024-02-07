@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Loader from '../components/Loader'
-import { Island, Runner, StillRunner, CustomMarchingCubes } from '../models'
+import { Island, Runner, StillRunner, CustomMarchingCubes, NightSky } from '../models'
 import { Environment } from '@react-three/drei'
 
 const Home = () => {
@@ -62,7 +62,6 @@ const Home = () => {
                     <Runner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={runnerRotation}/>
                     <StillRunner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={[0.0, 0.4, 0]}/>
                     <Island position={islandPosition} scale={islandScale} rotation={islandRotation} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage} obeliskRotation={obeliskRotation} obeliskScale={obeliskScale} obeliskRadius={obeliskRadius}/>
-                    
                 </Suspense>
             </Canvas>
         </section>
