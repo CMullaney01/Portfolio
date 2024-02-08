@@ -57,13 +57,17 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
 
     // Handle pointer (mouse or touch) up event
     const handlePointerUp = (event) => {
+        console.log("Poiter up")
         event.stopPropagation();
         event.preventDefault();
         setIsRotating(false);
     };
 
+    // const throttledHandlePointerMove = throttle(handlePointerMove, 16); // Adjust the throttle time as needed (e.g., 16ms for 60fps)
+
     // Handle pointer (mouse or touch) move event
     const handlePointerMove = (event) => {
+        console.log("PointerMoved")
         event.stopPropagation();
         event.preventDefault();
         if (isRotating) {
