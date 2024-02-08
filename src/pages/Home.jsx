@@ -1,35 +1,39 @@
-import React, { useState, Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
+import React, { useState, Suspense, useEffect } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import Loader from '../components/Loader'
 import { Island, Runner, StillRunner, CustomMarchingCubes, NightSky } from '../models'
-import { Environment, Html } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
     const [currentStage, setCurrentStage] = useState(1);
     const [isPanelView, setIsPanelView] = useState(false);
+    const [cameraPosition, setCameraPosition] = useState([0, 0, 5]);
 
     const togglePanelView = () => {
-        setIsPanelView(!isPanelView);
+        setIsPanelView(prevState => !prevState);
     };
 
-    const adjustCameraForPanelView = () => {
-        const defaultCameraSettings = {
-            defaultPosition: [0, 0, 5],
-            defaultRotation: [0, 0, 0],
-            panelPosition: [1,1,1], // Adjust these values accordingly
-            panelRotation: [0,0,0], // Adjust these values accordingly
-        };
-
-        if (isPanelView) {
-            return { position: defaultCameraSettings.panelPosition, rotation: defaultCameraSettings.panelRotation };
-        } else {
-            return { position: defaultCameraSettings.defaultPosition, rotation: defaultCameraSettings.defaultRotation };
+    // Update camera position when isRotating changes
+    useEffect(() => {
+        // Check if rotating, then exit the close-up view
+        if (isRotating) {
+            setIsPanelView(false);
         }
-    };
+        // Update camera settings based on panel view state
+        if (!isPanelView) {
+            setCameraPosition([0, 0, 5]); // Default position
+        } else {
+            setCameraPosition([0, -10, -10]); // Panel position
+        }
+    }, [isRotating, isPanelView]);
 
-    const cameraSettings = adjustCameraForPanelView();
-    
+    // Define the CameraRig component
+    function CameraRig({ position: [x, y, z] }) {
+        useFrame((state) => {
+            state.camera.position.lerp({ x, y, z }, 0.1)
+        })
+    }
 
     const adjustIslandForScreenSize = () => {
         let screenScale = null;
@@ -73,36 +77,25 @@ const Home = () => {
     const [islandScale, islandPosition, islandRotation] = adjustIslandForScreenSize();
     const [runnerScale, runnerPosition, runnerRotation] = adjustRunnerForScreenSize();
     const [obeliskScale, obeliskRotation, obeliskRadius] = adjustObelisksForScreenSize();
-   return (
-        <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-            <Canvas>
-                <Suspense fallback={<Loader />}>
-                    <Environment preset="night" background blur={0.5} />
-                    <directionalLight position={[1, 1, 1]} intensity={2} color="#fffae6" />
-                    <Runner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={runnerRotation} />
-                    <StillRunner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={[0.0, 0.4, 0]} />
-                    <Island
-                        position={islandPosition}
-                        scale={islandScale}
-                        rotation={islandRotation}
-                        isRotating={isRotating}
-                        setIsRotating={setIsRotating}
-                        setCurrentStage={setCurrentStage}
-                        obeliskRotation={obeliskRotation}
-                        obeliskScale={obeliskScale}
-                        obeliskRadius={obeliskRadius}
-                    />
-                </Suspense>
-            </Canvas>
-            {isPanelView && (
-                <Html style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: '20px', borderRadius: '5px' }}>
-                        <button onClick={togglePanelView}>Close Panel</button>
-                    </div>
-                </Html>
-            )}
-        </div>
-    );
-};
+    return (
+    <section className='w-full h-screen relative'>
+      {/* Define the Canvas */}
+      <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
+        {/* Add the CameraRig component */}
+        <CameraRig position={cameraPosition} />
+        {/* Add the scene components */}
+        <Suspense fallback={<Loader />}>
+          <Environment preset="night" background blur={0.5} />
+          <directionalLight position={[1, 1, 1]} intensity={2} color="#fffae6" />
+          <Runner isRotating={isRotating} position={[-0.6, -2.8, 1]} scale={[0.0035, 0.0035, 0.0035]} rotation={[0.0, 1, 0]} />
+          <StillRunner isRotating={isRotating} position={[-0.6, -2.8, 1]} scale={[0.0035, 0.0035, 0.0035]} rotation={[0.0, 0.4, 0]} />
+          <Island position={[0, -25.5, -43]} scale={[2, 2, 2]} rotation={[0, 4.7, 0]} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage} obeliskRotation={[0, 0.1, 0]} obeliskScale={[0.1, 0.5, 0.6]} obeliskRadius={7} />
+        </Suspense>
+      </Canvas>
+      {/* Add the button for toggling panel view */}
+      <button onClick={togglePanelView} style={{ position: 'absolute', top: '300px', right: '300px' }}>Toggle Panel View</button>
+    </section>
+  )
+}
 
 export default Home;
