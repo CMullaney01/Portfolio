@@ -6,6 +6,7 @@ import { Environment } from '@react-three/drei'
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
+    const [finishedRotating, setFinishedRotating] = useState(true);
     const [currentStage, setCurrentStage] = useState(1);
     const [isPanelView, setIsPanelView] = useState(false);
     const [cameraPosition, setCameraPosition] = useState([0, 0, 5]);
@@ -24,7 +25,7 @@ const Home = () => {
         if (!isPanelView) {
             setCameraPosition([0, 0, 5]); // Default position
         } else {
-            setCameraPosition([0, -10, -10]); // Panel position
+            setCameraPosition([0, -9, -10]); // Panel position
         }
     }, [isRotating, isPanelView]);
 
@@ -37,20 +38,20 @@ const Home = () => {
 
     const adjustIslandForScreenSize = () => {
         let screenScale = null;
-        let screenPosition = [0, -25.5, -43];
+        let screenPosition = [0, -20, -43];
         let rotation = [0, 4.7, 0]
 
         if (window.innerWidth < 768) {
-            screenScale = [1,1,1];
+            screenScale = [0.1,0.1,0.1];
         } else {
-            screenScale = [2,2,2];
+            screenScale = [0.3,0.3,0.3];
         }
         return [screenScale, screenPosition, rotation]
     }
     // To be implemented after we have the basic functionality as we will need to rotate as well, do the same for plane
     const adjustRunnerForScreenSize = () => {
         let screenScale = null;
-        let screenPosition = [-0.6,-2.8,1];
+        let screenPosition = [-0.9,-2.8,1];
         let rotation = [0.0, 1, 0]
 
         if (window.innerWidth < 768) {
@@ -64,12 +65,13 @@ const Home = () => {
     const adjustObelisksForScreenSize = () => {
         let screenScale = null;
         let rotation = [0, 0.1, 0]
-        let obeliskRadius = 7
+        let obeliskRadius = 60
+
 
         if (window.innerWidth < 768) {
             screenScale = [0.1,0.5,0.6];
         } else {
-            screenScale = [0.1,0.5,0.6];
+            screenScale = [2,5,5];
         }
         return [screenScale, rotation, obeliskRadius]
     }
@@ -82,25 +84,40 @@ const Home = () => {
             <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
                 <CameraRig position={cameraPosition} />
                 <Suspense fallback={<Loader />}>
-          <Environment preset="night" background blur={0.5} />
-          <directionalLight position={[1, 1, 1]} intensity={2} color="#fffae6" />
-          <Runner isRotating={isRotating} position={[-0.6, -2.8, 1]} scale={[0.0035, 0.0035, 0.0035]} rotation={[0.0, 1, 0]} />
-          <StillRunner isRotating={isRotating} position={[-0.6, -2.8, 1]} scale={[0.0035, 0.0035, 0.0035]} rotation={[0.0, 0.4, 0]} />
-          <Island position={[0, -25.5, -43]} scale={[2, 2, 2]} rotation={[0, 4.7, 0]} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage} obeliskRotation={[0, 0.1, 0]} obeliskScale={[0.1, 0.5, 0.6]} obeliskRadius={7} />
-        </Suspense>
-      </Canvas>
+                    <Environment preset="dawn" background blur={0.5} />
+                    <directionalLight position={[1, 1, 1]} intensity={2} color="#fffae6" />
+                    <ambientLight intensity={0.5} />
+                    <hemisphereLight skyColor="#000022" groundColor="#000000" intensity={1}/>
+                    <Runner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={[0.0, 1, 0]} />
+                    <StillRunner isRotating={isRotating} position={runnerPosition} scale={runnerScale} rotation={[0.0, 0.4, 0]} />
+                    <Island
+                        position={islandPosition}
+                        scale={islandScale}
+                        rotation={islandRotation}
+                        isRotating={isRotating}
+                        setIsRotating={setIsRotating}
+                        setCurrentStage={setCurrentStage}
+                        obeliskRotation={obeliskRotation}
+                        obeliskScale={obeliskScale}
+                        obeliskRadius={obeliskRadius}
+                        isPanelView={isPanelView}
+                        finishedRotating={finishedRotating}
+                        setFinishedRotating={setFinishedRotating}
+                    />
+                </Suspense>
+            </Canvas>
       {/* Conditional rendering of "Swipe or press Down to move" */}
       {!isRotating && !isPanelView && (
                 <div
+                    
                     style={{
                         position: 'absolute',
-                        top: '20%',
+                        top: '10%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         backgroundColor: 'rgba(255, 255, 255, 0.3)',
                         verticalAlign: 'middle',
                         textAlign: 'center',
-                        color: '#ffffff',
                         padding: '10px 20px',
                         borderRadius: '10px',
                         border: 'none',
@@ -112,14 +129,14 @@ const Home = () => {
                 </div>
             )}
             {/* Button for toggling panel view */}
-            <button
+           {finishedRotating &&
+            ( <button
                 onClick={togglePanelView}
                 style={{
                     position: 'absolute',
-                    bottom: '20px',
-                    right: '20px',
+                    bottom: '100px',
+                    right: '400px',
                     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                    color: '#ffffff',
                     padding: '10px 20px',
                     borderRadius: '10px',
                     border: 'none',
@@ -128,7 +145,7 @@ const Home = () => {
                 }}
             >
                 Toggle Panel View
-            </button>
+            </button>)}
         </section>
   )
 }

@@ -15,46 +15,20 @@ import beachBall from '../assets/textures/BeachBallColor.jpg'
 import * as THREE from "three";
 
 
-import islandScene from '../assets/3d/Background_noSurface.glb'
+import islandScene from '../assets/3d/IslandV7.glb'
 import { NightSky } from "./Stars";
 
-// Preload textures
-const textureCoast = new THREE.TextureLoader().load(coast);
-const textureSoil = new THREE.TextureLoader().load(soil);
-const textureContainer = new THREE.TextureLoader().load(container);
+// Preload texture
 const textureFabric = new THREE.TextureLoader().load(fabric);
-const textureBeachBall = new THREE.TextureLoader().load(beachBall);
 
-// Create materials using preloaded textures
-const beachBallMat = new THREE.MeshStandardMaterial({
-    map: textureBeachBall,
-    roughness: 0.2,
-    metalness: 0.1
-});
 const fabricMat = new THREE.MeshStandardMaterial({
     map: textureFabric,
     roughness: 0,
     metalness: 1
 });
-const coastMat = new THREE.MeshStandardMaterial({
-    map: textureCoast,
-    roughness: 0.8,
-    metalness: 0
-});
-const soilMat = new THREE.MeshStandardMaterial({
-    map: textureSoil,
-    roughness: 0.7,
-    metalness: 1
-});
-
-const containerMat = new THREE.MeshStandardMaterial({
-    map: textureContainer,
-    roughness: 0.9,
-    metalness: 0.5
-});
 
 
-const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskRotation, obeliskScale, obeliskRadius, ...props })  => {
+const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskRotation, obeliskScale, obeliskRadius, isPanelView, finishedRotating, setFinishedRotating, ...props })  => {
     const islandRef = useRef();
     // Get access to the Three.js renderer and viewport
     const { gl, viewport } = useThree();
@@ -72,6 +46,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         event.stopPropagation();
         event.preventDefault();
         setIsRotating(true);
+        setFinishedRotating(false);
 
         // Calculate the clientX based on whether it's a touch event or a mouse event
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
@@ -114,11 +89,13 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
     const handleKeyDown = (event) => {
         if (event.key === "ArrowLeft") {
         if (!isRotating) setIsRotating(true);
+        setFinishedRotating(false);
 
         islandRef.current.rotation.y += 0.005 * Math.PI;
         rotationSpeed.current = 0.0125;
         } else if (event.key === "ArrowRight") {
         if (!isRotating) setIsRotating(true);
+        setFinishedRotating(false);
 
         islandRef.current.rotation.y -= 0.005 * Math.PI;
         rotationSpeed.current = -0.0125;
@@ -161,7 +138,6 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         const rotation = islandRef.current.rotation.y;
         const normalizedRotation =
             ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-        
         // If not rotating, apply damping to slow down the rotation (smoothly)
         if (!isRotating) {
             // Apply damping factor
@@ -191,6 +167,10 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
                 }
                 const transitionSpeed = deltaRotation * dampingFactor * 0.1; // Adjust transition speed as needed
                 islandRef.current.rotation.y += transitionSpeed;
+                // Check if the island has snapped back to one of the obelisks
+                if (Math.abs(deltaRotation) < 0.01) {
+                    setFinishedRotating(true);
+                }
             } else {
                 islandRef.current.rotation.y += rotationSpeed.current;
             }
@@ -220,50 +200,144 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         <mesh
             castShadow
             receiveShadow
-            geometry={nodes.Cube001.geometry}
-            material={soilMat}
-            position={[0.939, 5.95, 0]}
-            rotation={[0.327, -0.326, 0.671]}
-            scale={[1, 3.201, 1]}
+            geometry={nodes["C++_C++_0"].geometry}
+            material={materials.material}
+            position={[-22.328, 35.783, 23.904]}
+            rotation={[-1.552, -0.186, -0.794]}
+            scale={0.731}
+        />
+        <group
+            position={[23.162, 42.464, 18.352]}
+            rotation={[0.87, -0.082, -2.641]}
+            scale={-43.935}
+        >
+            <group rotation={[Math.PI / 2, 0, 0]}>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_10.geometry}
+                material={materials.orejas_black}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_4001.geometry}
+                material={materials.main_celeste}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_5001.geometry}
+                material={materials.piel_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_6.geometry}
+                material={materials.nariz}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_7.geometry}
+                material={materials.dientes}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_8.geometry}
+                material={materials.ojos}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_9.geometry}
+                material={materials.pupila}
+            />
+            </group>
+        </group>
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Object_4002.geometry}
+            material={materials.Glow}
+            position={[-19.611, 41.468, -24.23]}
+            rotation={[-2.59, -0.599, 1.202]}
+            scale={1.081}
         />
         <mesh
             castShadow
             receiveShadow
-            geometry={nodes.Torus.geometry}
+            geometry={nodes.Python_Python_0.geometry}
+            material={materials.Python}
+            position={[22.767, 42.973, -13.421]}
+            rotation={[-1.247, 0.003, 2.536]}
+            scale={0.792}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes["React-Logo_Material002_0"].geometry}
+            material={materials["Material.002"]}
+            position={[25.281, 98.99, -17.553]}
+            rotation={[Math.PI, 0.804, Math.PI / 2]}
+            scale={[4.835, 4.835, 6.51]}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Backdrop_Material001_0.geometry}
+            material={materials["Material.001"]}
+            position={[23.762, 98.99, -16.089]}
+            rotation={[Math.PI, 0.804, Math.PI / 2]}
+            scale={[30.597, 30.597, 6.51]}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.threejs.geometry}
+            material={materials.Material_0}
+            position={[-19.765, 96.45, -12.532]}
+            rotation={[1.016, 0.871, -0.9]}
+            scale={0.498}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Ethereum_3D_logoObject_0_lambert2_0.geometry}
+            material={materials.lambert2}
+            position={[33.182, 106.258, 27.55]}
+            rotation={[-1.786, 0.033, 0.943]}
+            scale={[0.03, 0.034, 0.038]}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Object_4003.geometry}
+            material={materials.Orange}
+            position={[-9.125, 94.81, 35.417]}
+            rotation={[Math.PI / 2, 0, 0.155]}
+            scale={7.571}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Object_5002.geometry}
+            material={materials.Blue}
+            position={[-9.125, 94.81, 35.417]}
+            rotation={[Math.PI / 2, 0, 0.155]}
+            scale={7.571}
+        />
+        <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Torus001.geometry}
             material={fabricMat}
-            position={[0.939, 3.692, 0]}
-            rotation={[-Math.PI, 0, -Math.PI]}
-            scale={[3.515, 5.87, 3.515]}
         />
-        <mesh
-            castShadow
-            receiveShadow
-            geometry={nodes.Sphere001.geometry}
-            // material={nodes.Sphere001.material}
-            material={beachBallMat}
-            position={[-0.794, 15.814, 3.634]}
-            scale={-3.473}
-        />
-        <mesh
-            castShadow
-            receiveShadow
-            geometry={nodes.Cylinder.geometry}
-            material={coastMat}
-            position={[3.77, 10.613, -0.948]}
-            rotation={[-1.59, -0.682, -1.575]}
-        />
-        <mesh
-            castShadow
-            receiveShadow
-            geometry={nodes.Cone.geometry}
-            material={fabricMat}
-            position={[0.939, 12.96, -1.466]}
-            rotation={[-1.206, 0.705, 1.038]}
-            scale={1.069}
-        />
+
          {/* ObeliskCircle component */}
-         <ObeliskCircle center={position} radius={obeliskRadius} scale={obeliskScale} isRotating={isRotating} initialRotation={obeliskRotation}/>
-         <NightSky numStars={200}/>
+         <ObeliskCircle center={position} radius={obeliskRadius} scale={obeliskScale} isRotating={isRotating} initialRotation={obeliskRotation} isPanelView={isPanelView} finishedRotating={finishedRotating}/>
+         <NightSky numStars={100}/>
         </a.group>
     );
 }

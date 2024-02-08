@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Clone, useGLTF, Text } from '@react-three/drei';
+import { Clone, useGLTF, Text, Html } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
 import * as THREE from 'three'
+import { useFrame } from '@react-three/fiber';
 
-const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
+const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, finishedRotating }) => {
     const { scene: obeliskGLTF } = useGLTF(obeliskScene);
     const [rotation, setRotation] = useState(initialRotation);
-
+    const [obeliskOpacity, setObeliskOpacity] = useState(finishedRotating ? 1: 0.1);
+    
     if (typeof radius !== 'number' || radius <= 0 || isNaN(radius)) {
         console.error('Invalid radius for ObeliskCircle:', radius);
         return null;
@@ -14,7 +16,9 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
 
     const numObelisks = 3;
     const obeliskComponents = [];
-    const textComponents = [];
+    const closedComponents = [];
+    const openComponents = [];
+    const opacityLerpSpeed = 0.03; // Adjust the lerp speed as needed
 
     // Calculate the angle between each obelisk
     const angleStep = (2 * Math.PI) / numObelisks;
@@ -27,17 +31,31 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
         obeliskGLTF.traverse((child) => {
             if (child.isMesh) {
                 child.material.transparent = true;
-                child.material.opacity = 0.5; // Set the opacity value here
+                child.material.opacity = finishedRotating ? 0.8 : 0.2;
                 child.material.reflectivity = 1; // Set the reflectivity to make it look like glass
                 child.material.refractionRatio = 0.98; // Set the refraction ratio for glass-like effect
                 child.material.envMapIntensity = 1; // Set environment map intensity
-                // Optionally, you can set other properties like color, roughness, etc. for a better glass effect
+        
+                // Adjust the color, roughness, and metalness for a better glass effect
                 child.material.color = new THREE.Color(1, 1, 1); // Set color to white (optional)
-                child.material.roughness = 0.1; // Set roughness (optional)
-                child.material.metalness = 0.9; // Set metalness (optional)
+                child.material.roughness = 0.1; // Adjust roughness for smoothness (optional)
+                child.material.metalness = 0.9; // Adjust metalness for reflectivity (optional)
             }
         });
     }, [initialRotation, obeliskGLTF]);
+    // Use the useFrame hook to update opacity smoothly
+    useFrame(() => {
+        const targetOpacity = finishedRotating ? 1 : 0.1;
+
+        // Smoothly adjust opacity using linear interpolation
+        setObeliskOpacity((prevOpacity) => THREE.MathUtils.lerp(prevOpacity, targetOpacity, opacityLerpSpeed));
+        // Update the opacity of each obelisk
+        obeliskGLTF.traverse((child) => {
+            if (child.isMesh) {
+                child.material.opacity = obeliskOpacity;
+            }
+        });
+    });
 
     // Calculate the initial rotation angle of the first obelisk
     const initialRotationY = Math.atan2(rotation[2], rotation[0]);
@@ -51,7 +69,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
         const z = center[2] + radius * Math.sin(angle) + 43;
 
         // Calculate the position for the text component (an amount further away from the center)
-        const textOffset = 0.1; // Adjust the offset as needed
+        const textOffset = 2; // Adjust the offset as needed
         const textX = x + textOffset * Math.cos(angle);
         const textZ = z + textOffset * Math.sin(angle);
 
@@ -60,23 +78,105 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
 
         obeliskComponents.push(
             <group key={i}>
-                <Clone object={obeliskGLTF} position={[x, 2, z]} scale={scale} rotation={[0, rotationY, 0]} />
+                <Clone object={obeliskGLTF} position={[x, 2, z]} scale={scale} rotation={[0, rotationY, 0]}>
+                    
+                </Clone>
             </group>
         );
-
+        const texts = ["Skills", "Projects", "Contact Me"];
         // Add text components
-        textComponents.push(
-            <Text
-                key={i}
-                scale={[0.5, 0.5, 0.5]} // Adjust the scale to make the text smaller
-                color="black"
-                anchorX="center"
-                anchorY="bottom"
-                position={[textX, 15 * scale[1], textZ]} // Adjust the y position to sit slightly above the obelisks
-                rotation={[0, rotationY + Math.PI / 2, 0]} // Reverse rotation and add Math.PI to align properly
+        closedComponents.push(
+            <Html key={i} scale={1} rotation={[0, rotationY + Math.PI / 2, 0]} position={[textX, 12 * scale[1], textZ]} transform occlude>
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '10%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.3)', // More frosted glass effect
+                        verticalAlign: 'middle',
+                        textAlign: 'center',
+                        padding: '10px 20px',
+                        borderRadius: '50px',
+                        border: 'none',
+                        color: 'rgb(25, 25, 112)',
+                        fontWeight: 'bold',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                        fontSize: '10em',
+                        whiteSpace: 'nowrap'
+                    }}
+                >
+                    {texts[i]}
+                </div>
+            </Html>
+        );
+
+        openComponents.push(
+        <Html
+            key={i}
+            scale={1}
+            rotation={[0, rotationY + Math.PI / 2, 0]}
+            position={[textX, 8 * scale[1], textZ]}
+            transform
+            occlude
+            fullscreen
+            style={{
+                width: "1500px",
+                height: "2100px",
+                // backgroundColor: "#454545",
+                display: "grid",
+                placeContent: "center"
+            }}
+        >
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '10%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
+                    verticalAlign: 'middle',
+                    textAlign: 'center',
+                    padding: '10px 30px',
+                    borderRadius: '50px',
+                    // border: '10px solid #FFA500', // Border around the first div
+                    color: 'rgb(25, 25, 112)',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    fontSize: '10em',
+                    whiteSpace: 'nowrap'
+                }}
             >
-                Your Text
-            </Text>
+                {texts[i]}
+            </div>
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '50%', // Adjusted top position to appear below the first div
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '1400px', // Set width to 100 pixels
+                    height: '1000px', // Set height to 100 pixels
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
+                    textAlign: 'center',
+                    padding: '20px', // Adjusted padding for a narrower div
+                    borderRadius: '10px',
+                    // border: '10px solid #FFA500', // Border around the second div
+                    color: 'rgb(25, 25, 112)',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    lineHeight: '1.5',
+                }}
+            >
+                <ul style={{ textAlign: 'left', margin: '0', padding: '0 0 0 20px', fontSize: '6em', listStyleType: 'disc'}}>
+                    <li>I have strong technical skills with a love for learning.</li>
+                    <li>C++, Golang, Python</li>
+                </ul>
+                <p style={{ margin: '20px 0 0', fontSize: '4em' }}>Please check out the <a href="/about" style={{ color: 'rgb(25, 25, 112)', textDecoration: 'underline' }}>About page</a> if you would like to learn more.</p>
+            </div>
+        </Html>
         );
     }
 
@@ -85,7 +185,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation }) => {
             {/* Render the obelisk components */}
             {obeliskComponents}
             {/* Render the text components */}
-            {textComponents}
+            {finishedRotating ? openComponents : closedComponents}
         </>
     );
 };
