@@ -84,6 +84,13 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             </group>
         );
         const texts = ["Skills", "Projects", "Contact Me"];
+        const paragraphs = [
+            "I'm enthusiastic about technology and love diving into new challenges. With experience in C++, Golang, React web development, and IoT, I'm always eager to expand my skills. Let's explore how my expertise can bring value to your projects!",
+            "I've worked on a diverse range of projects, spanning from IoT and React development to machine learning, AI, and even Blender creations. Feel free to explore my portfolio to see some of these exciting projects in action!",
+            "If you have any questions or inquiries, I'm here to help! Feel free to reach out to me via email, and I'll be more than happy to discuss any opportunities or concerns you may have. Looking forward to hearing from you!"
+        ];
+        const pages = ["About", "Projects", "Contact"]
+        const pagerefs = ["/about", "/projects", "/contact"]
         // Add text components
         closedComponents.push(
             <Html key={i} scale={1} rotation={[0, rotationY + Math.PI / 2, 0]} position={[textX, 12 * scale[1], textZ]} transform occlude>
@@ -154,15 +161,15 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             <div
                 style={{
                     position: 'absolute',
-                    top: '50%', // Adjusted top position to appear below the first div
+                    top: '55%', // Adjusted top position to appear below the first div
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '1400px', // Set width to 100 pixels
-                    height: '1000px', // Set height to 100 pixels
+                    width: '1500px', // Set width to 100 pixels
+                    height: '1100px', // Set height to 100 pixels
                     backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
                     textAlign: 'center',
                     padding: '20px', // Adjusted padding for a narrower div
-                    borderRadius: '10px',
+                    borderRadius: '60px',
                     // border: '10px solid #FFA500', // Border around the second div
                     color: 'rgb(25, 25, 112)',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -170,11 +177,9 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
                     lineHeight: '1.5',
                 }}
             >
-                <ul style={{ textAlign: 'left', margin: '0', padding: '0 0 0 20px', fontSize: '6em', listStyleType: 'disc'}}>
-                    <li>I have strong technical skills with a love for learning.</li>
-                    <li>C++, Golang, Python</li>
-                </ul>
-                <p style={{ margin: '20px 0 0', fontSize: '4em' }}>Please check out the <a href="/about" style={{ color: 'rgb(25, 25, 112)', textDecoration: 'underline' }}>About page</a> if you would like to learn more.</p>
+                <p style={{ margin: '20px 0 0', fontSize: '4em' }}>{paragraphs[i]}</p>
+                
+                <p style={{ margin: '250px 0 0', fontSize: '4em' }}>Please check out the <a href={pagerefs[i]} style={{ color: 'rgb(25, 25, 112)', textDecoration: 'underline' }}>{pages[i]} page</a> if you would like to learn more.</p>
             </div>
         </Html>
         );
