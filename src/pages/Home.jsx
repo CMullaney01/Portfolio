@@ -78,13 +78,10 @@ const Home = () => {
     const [runnerScale, runnerPosition, runnerRotation] = adjustRunnerForScreenSize();
     const [obeliskScale, obeliskRotation, obeliskRadius] = adjustObelisksForScreenSize();
     return (
-    <section className='w-full h-screen relative'>
-      {/* Define the Canvas */}
-      <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
-        {/* Add the CameraRig component */}
-        <CameraRig position={cameraPosition} />
-        {/* Add the scene components */}
-        <Suspense fallback={<Loader />}>
+        <section className='w-full h-screen relative'>
+            <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
+                <CameraRig position={cameraPosition} />
+                <Suspense fallback={<Loader />}>
           <Environment preset="night" background blur={0.5} />
           <directionalLight position={[1, 1, 1]} intensity={2} color="#fffae6" />
           <Runner isRotating={isRotating} position={[-0.6, -2.8, 1]} scale={[0.0035, 0.0035, 0.0035]} rotation={[0.0, 1, 0]} />
@@ -92,25 +89,47 @@ const Home = () => {
           <Island position={[0, -25.5, -43]} scale={[2, 2, 2]} rotation={[0, 4.7, 0]} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage} obeliskRotation={[0, 0.1, 0]} obeliskScale={[0.1, 0.5, 0.6]} obeliskRadius={7} />
         </Suspense>
       </Canvas>
-      {/* Add the button for toggling panel view */}
-      <button 
-            onClick={togglePanelView} 
-            style={{
-                position: 'absolute', 
-                bottom: '20px', 
-                right: '20px', 
-                backgroundColor: 'rgba(255, 255, 255, 0.3)', 
-                color: '#ffffff', 
-                padding: '10px 20px', 
-                borderRadius: '10px', 
-                border: 'none', 
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', 
-                backdropFilter: 'blur(10px)' 
-            }}
-        >
-            Toggle Panel View
-        </button>
-    </section>
+      {/* Conditional rendering of "Swipe or press Down to move" */}
+      {!isRotating && !isPanelView && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '20%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                        verticalAlign: 'middle',
+                        textAlign: 'center',
+                        color: '#ffffff',
+                        padding: '10px 20px',
+                        borderRadius: '10px',
+                        border: 'none',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        backdropFilter: 'blur(10px)'
+                    }}
+                >
+                    Swipe or press Down to move
+                </div>
+            )}
+            {/* Button for toggling panel view */}
+            <button
+                onClick={togglePanelView}
+                style={{
+                    position: 'absolute',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                    color: '#ffffff',
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(10px)'
+                }}
+            >
+                Toggle Panel View
+            </button>
+        </section>
   )
 }
 
