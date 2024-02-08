@@ -71,7 +71,7 @@ const Home = () => {
         if (window.innerWidth < 768) {
             screenScale = [0.1,0.5,0.6];
         } else {
-            screenScale = [2,5,5];
+            screenScale = [0.2,5,5];
         }
         return [screenScale, rotation, obeliskRadius]
     }

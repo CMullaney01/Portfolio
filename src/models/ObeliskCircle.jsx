@@ -7,7 +7,7 @@ import { useFrame } from '@react-three/fiber';
 const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, finishedRotating }) => {
     const { scene: obeliskGLTF } = useGLTF(obeliskScene);
     const [rotation, setRotation] = useState(initialRotation);
-    const [obeliskOpacity, setObeliskOpacity] = useState(finishedRotating ? 1: 0.1);
+    const [obeliskOpacity, setObeliskOpacity] = useState(isPanelView ? 1: 0.1);
     
     if (typeof radius !== 'number' || radius <= 0 || isNaN(radius)) {
         console.error('Invalid radius for ObeliskCircle:', radius);
@@ -31,7 +31,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
         obeliskGLTF.traverse((child) => {
             if (child.isMesh) {
                 child.material.transparent = true;
-                child.material.opacity = finishedRotating ? 0.8 : 0.2;
+                child.material.opacity = isPanelView ? 0.8 : 0.2;
                 child.material.reflectivity = 1; // Set the reflectivity to make it look like glass
                 child.material.refractionRatio = 0.98; // Set the refraction ratio for glass-like effect
                 child.material.envMapIntensity = 1; // Set environment map intensity
@@ -45,7 +45,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
     }, [initialRotation, obeliskGLTF]);
     // Use the useFrame hook to update opacity smoothly
     useFrame(() => {
-        const targetOpacity = finishedRotating ? 1 : 0.1;
+        const targetOpacity = isPanelView ? 1 : 0.1;
 
         // Smoothly adjust opacity using linear interpolation
         setObeliskOpacity((prevOpacity) => THREE.MathUtils.lerp(prevOpacity, targetOpacity, opacityLerpSpeed));
@@ -178,9 +178,9 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
                 }}
             >
                 <p style={{ margin: '20px 0 0', fontSize: '4em' }}>{paragraphs[i]}</p>
-                
                 <p style={{ margin: '250px 0 0', fontSize: '4em' }}>Please check out the <a href={pagerefs[i]} style={{ color: 'rgb(25, 25, 112)', textDecoration: 'underline' }}>{pages[i]} page</a> if you would like to learn more.</p>
             </div>
+            {/* <iframe style={{ margin: '2000px 0 0'}} src={pagerefs[i]} width="1400" height="600"></iframe> */}
         </Html>
         );
     }
@@ -190,7 +190,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             {/* Render the obelisk components */}
             {obeliskComponents}
             {/* Render the text components */}
-            {finishedRotating ? openComponents : closedComponents}
+            {isPanelView ? openComponents : closedComponents}
         </>
     );
 };

@@ -1,9 +1,7 @@
 import css from './css.svg'
 import express from './express.svg'
 import git from './git.svg'
-import github from './github.svg'
 import html from './html.svg'
-import javascript from './javascript.svg'
 import mongodb from './mongodb.svg'
 import motion from './motion.svg'
 import mui from './mui.svg'
@@ -26,8 +24,27 @@ import arrow from './arrow.svg'
 import contact from './contact.svg'
 import soundon from './soundon.png'
 import soundoff from './soundoff.png'
+import github from './github.svg'
+import javascript from './javascript.svg'
+import iota from './iota.png'
+import cplus from './cplus.png'
+import go from './go.png'
+import py from './py.png'
+import blender from './blender.png'
+import cpu from './cpu.png'
+import server from './server.png'
+import brain from './brain.png'
+
 
 export {
+    brain,
+    server,
+    cpu,
+    iota,
+    cplus,
+    go,
+    py,
+    blender,
     css,
     express,
     git,
