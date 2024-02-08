@@ -93,7 +93,23 @@ const Home = () => {
         </Suspense>
       </Canvas>
       {/* Add the button for toggling panel view */}
-      <button onClick={togglePanelView} style={{ position: 'absolute', top: '300px', right: '300px' }}>Toggle Panel View</button>
+      <button 
+            onClick={togglePanelView} 
+            style={{
+                position: 'absolute', 
+                bottom: '20px', 
+                right: '20px', 
+                backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+                color: '#ffffff', 
+                padding: '10px 20px', 
+                borderRadius: '10px', 
+                border: 'none', 
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', 
+                backdropFilter: 'blur(10px)' 
+            }}
+        >
+            Toggle Panel View
+        </button>
     </section>
   )
 }
