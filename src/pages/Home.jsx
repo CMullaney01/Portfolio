@@ -23,9 +23,9 @@ const Home = () => {
         }
         // Update camera settings based on panel view state
         if (!isPanelView) {
-            setCameraPosition([0, 0, 5]); // Default position
+            setCameraPosition([-0, 0, 5]); // Default position
         } else {
-            setCameraPosition([0, -9, -10]); // Panel position
+            setCameraPosition([-0.3, -9, -8.5]); // Panel position
         }
     }, [isRotating, isPanelView]);
 
@@ -42,7 +42,7 @@ const Home = () => {
         let rotation = [0, 4.7, 0]
 
         if (window.innerWidth < 768) {
-            screenScale = [0.1,0.1,0.1];
+            screenScale = [0.3,0.3,0.3];
         } else {
             screenScale = [0.3,0.3,0.3];
         }
@@ -69,7 +69,7 @@ const Home = () => {
 
 
         if (window.innerWidth < 768) {
-            screenScale = [0.1,0.5,0.6];
+            screenScale = [0.2,5,4.5];
         } else {
             screenScale = [0.2,5,5];
         }
@@ -112,7 +112,7 @@ const Home = () => {
                     
                     style={{
                         position: 'absolute',
-                        top: '10%',
+                        top: '15%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         backgroundColor: 'rgba(255, 255, 255, 0.3)',
@@ -134,14 +134,17 @@ const Home = () => {
                 onClick={togglePanelView}
                 style={{
                     position: 'absolute',
-                    bottom: '100px',
-                    right: '400px',
+                    bottom: '15%',
+                    right: '50%',
                     backgroundColor: 'rgba(255, 255, 255, 0.3)',
                     padding: '10px 20px',
                     borderRadius: '10px',
                     border: 'none',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(10px)'
+                    backdropFilter: 'blur(10px)',
+                    transform: 'translateX(50%)',
+                    zIndex: 1000,
+
                 }}
             >
                 Toggle Panel View
