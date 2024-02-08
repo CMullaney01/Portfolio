@@ -25,7 +25,11 @@ const Home = () => {
         if (!isPanelView) {
             setCameraPosition([-0, 0, 5]); // Default position
         } else {
-            setCameraPosition([-0.3, -9, -8.5]); // Panel position
+            if (window.innerWidth < 768) {
+                setCameraPosition([-0.2, -9, -7])
+            } else {
+                setCameraPosition([-0, -9, -10]); // Panel position
+            }
         }
     }, [isRotating, isPanelView]);
 
@@ -81,7 +85,7 @@ const Home = () => {
     const [obeliskScale, obeliskRotation, obeliskRadius] = adjustObelisksForScreenSize();
     return (
         <section className='w-full h-screen relative'>
-            <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
+            <Canvas className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}` } style={{ touchAction: 'none' }}>
                 <CameraRig position={cameraPosition} />
                 <Suspense fallback={<Loader />}>
                     <Environment preset="dawn" background blur={0.5} />
