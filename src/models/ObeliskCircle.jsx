@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Clone, useGLTF, Text, Html } from '@react-three/drei';
+import { Clone, useGLTF, Html } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber';
@@ -90,7 +90,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             "If you have any questions or inquiries, I'm here to help! Feel free to reach out to me via email, and I'll be more than happy to discuss any opportunities or concerns you may have. Looking forward to hearing from you!"
         ];
         const pages = ["About", "Projects", "Contact"]
-        const pagerefs = ["/about", "/projects", "/contact"]
+        const pagerefs = ["https://mullaneyportfolio.netlify.app/about", "https://mullaneyportfolio.netlify.app/projects", "https://mullaneyportfolio.netlify.app/contact"]
         // Add text components
         closedComponents.push(
             <Html key={i} scale={1} rotation={[0, rotationY + Math.PI / 2, 0]} position={[textX, 12 * scale[1], textZ]} transform occlude>
