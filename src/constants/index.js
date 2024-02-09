@@ -66,7 +66,7 @@ export const experiences = [
         company_name: "Toshiba Europe",
         icon: toshiba,
         iconBg: "#b7e4c7",
-        date: "June 2022 - June 2022",
+        date: "June 2022 - June 2023",
         points: [
             "Worked on wireless connectivity protocols and nRF52840-DK boards to simulate the use of bluetooth as a communication mechanism in real-time environments.",
             "Integrated moving Electric Vehicles and Certificate Authority-based authentication to secure peer-to-peer energy trading amongst multiple devices",
