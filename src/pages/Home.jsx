@@ -26,7 +26,7 @@ const Home = () => {
             setCameraPosition([-0, 0, 5]); // Default position
         } else {
             if (window.innerWidth < 768) {
-                setCameraPosition([-0.2, -9, -7])
+                setCameraPosition([-0.3, -9, -7])
             } else {
                 setCameraPosition([-0, -9, -10]); // Panel position
             }
@@ -37,6 +37,8 @@ const Home = () => {
     function CameraRig({ position: [x, y, z] }) {
         useFrame((state) => {
             state.camera.position.lerp({ x, y, z }, 0.1)
+            state.camera.rotation.y = -0.02
+            state.camera.rotation.x = -0.02
         })
     }
 

@@ -69,7 +69,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
         const z = center[2] + radius * Math.sin(angle) + 43;
 
         // Calculate the position for the text component (an amount further away from the center)
-        const textOffset = 4; // Adjust the offset as needed
+        const textOffset = 2; // Adjust the offset as needed
         const textX = x + textOffset * Math.cos(angle);
         const textZ = z + textOffset * Math.sin(angle);
 
@@ -158,6 +158,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             >
                 {texts[i]}
             </div>
+            
             <div
                 style={{
                     position: 'absolute',
@@ -177,6 +178,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
                     lineHeight: '1.5',
                 }}
             >
+                <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
                 <p style={{ margin: '20px 0 0', fontSize: '4em' }}>{paragraphs[i]}</p>
                 <p style={{ margin: '250px 0 0', fontSize: '4em' }}>Please check out the <a href={pagerefs[i]} style={{ color: 'rgb(25, 25, 112)', textDecoration: 'underline' }}>{pages[i]} page</a> if you would like to learn more.</p>
             </div>
