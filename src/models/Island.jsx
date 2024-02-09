@@ -97,13 +97,22 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
     // Handle keydown events
     const handleKeyDown = (event) => {
         if (event.key === "ArrowLeft") {
-        if (!isRotating) setIsRotating(true);
+        if (!isRotating) {
+            setIsRotating(true)
+            lastPanelState.current = isPanelView;
+        };
         setFinishedRotating(false);
+        // Store the current isPanelView state for reference
+
+        // Set isPanelView to false
 
         islandRef.current.rotation.y += 0.005 * Math.PI;
         rotationSpeed.current = 0.0125;
         } else if (event.key === "ArrowRight") {
-        if (!isRotating) setIsRotating(true);
+        if (!isRotating) {
+            setIsRotating(true)
+            lastPanelState.current = isPanelView;
+        };
         setFinishedRotating(false);
 
         islandRef.current.rotation.y -= 0.005 * Math.PI;
@@ -111,7 +120,6 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         }
 
         // Store the current isPanelView state for reference
-        lastPanelState.current = isPanelView;
 
         // Set isPanelView to false
         setIsPanelView(false);
