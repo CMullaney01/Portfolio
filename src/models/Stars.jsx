@@ -56,7 +56,7 @@ const useStars = (numStars) => {
 
 const NightSky = ({ numStars }) => {
     const stars = useStars(numStars);
-
+    
     return (
         <>
             {stars.map(star => (
