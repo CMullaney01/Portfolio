@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import Loader from '../components/Loader'
 import { Island, Runner, StillRunner} from '../models'
 import { Environment } from '@react-three/drei'
+import './Home.css'
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
@@ -115,69 +116,25 @@ const Home = () => {
             </Canvas>
       {/* Conditional rendering of "Swipe or press Down to move" */}
       {!isRotating && !isPanelView && (
-                <div
-                    
-                    style={{
-                        position: 'absolute',
-                        top: '15%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                        verticalAlign: 'middle',
-                        textAlign: 'center',
-                        padding: '10px 20px',
-                        borderRadius: '10px',
-                        border: 'none',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        backdropFilter: 'blur(10px)'
-                    }}
-                >
+                <div className="swipeInstructionContainer">
                     Swipe or press Arrow to move
                 </div>
             )}
             {/* Button for toggling panel view */}
-           {finishedRotating &&
-            ( <button
+            {finishedRotating && (
+            <button
                 onClick={togglePanelView}
-                style={{
-                    position: 'absolute',
-                    bottom: '15%',
-                    right: '50%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                    padding: '10px 20px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(10px)',
-                    transform: 'translateX(50%)',
-                    zIndex: 1000,
-
-                }}
+                className='buttonContainer'
             >
                 Toggle Panel View
-            </button>)}
-            {finishedRotating &&  isPanelView && (
-                <div
-                    
-                    style={{
-                        position: 'absolute',
-                        bottom: '20%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                        verticalAlign: 'middle',
-                        textAlign: 'center',
-                        padding: '10px 20px',
-                        borderRadius: '10px',
-                        border: 'none',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        backdropFilter: 'blur(10px)'
-                    }}
-                >
-                    Keep Swiping!
-                </div>
-            )}
-        </section>
+            </button>
+        )}
+        {finishedRotating && isPanelView && (
+            <div className="panelViewContainer">
+                Keep Swiping!
+            </div>
+        )}
+    </section>
   )
 }
 
