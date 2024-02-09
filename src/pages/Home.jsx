@@ -1,7 +1,7 @@
 import React, { useState, Suspense, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import Loader from '../components/Loader'
-import { Island, Runner, StillRunner, CustomMarchingCubes, NightSky } from '../models'
+import { Island, Runner, StillRunner} from '../models'
 import { Environment } from '@react-three/drei'
 
 const Home = () => {
@@ -18,9 +18,9 @@ const Home = () => {
     // Update camera position when isRotating changes
     useEffect(() => {
         // Check if rotating, then exit the close-up view
-        if (isRotating) {
-            setIsPanelView(false);
-        }
+        // if (isRotating) {
+        //     setIsPanelView(false);
+        // }
         // Update camera settings based on panel view state
         if (!isPanelView) {
             setCameraPosition([-0, 0, 5]); // Default position
@@ -55,13 +55,13 @@ const Home = () => {
     // To be implemented after we have the basic functionality as we will need to rotate as well, do the same for plane
     const adjustRunnerForScreenSize = () => {
         let screenScale = null;
-        let screenPosition = [-0.9,-2.8,1];
+        let screenPosition = [-9,-16,-20];
         let rotation = [0.0, 1, 0]
 
         if (window.innerWidth < 768) {
-            screenScale = [0.0035,0.0035,0.0035];
+            screenScale = [0.035,0.035,0.035];
         } else {
-            screenScale = [0.0035,0.0035,0.0035];
+            screenScale = [0.035,0.035,0.035];
         }
         return [screenScale, screenPosition, rotation]
     }
@@ -105,6 +105,7 @@ const Home = () => {
                         obeliskScale={obeliskScale}
                         obeliskRadius={obeliskRadius}
                         isPanelView={isPanelView}
+                        setIsPanelView={setIsPanelView}
                         finishedRotating={finishedRotating}
                         setFinishedRotating={setFinishedRotating}
                     />
@@ -129,7 +130,7 @@ const Home = () => {
                         backdropFilter: 'blur(10px)'
                     }}
                 >
-                    Swipe or press Down to move
+                    Swipe or press Arrow to move
                 </div>
             )}
             {/* Button for toggling panel view */}
@@ -153,6 +154,27 @@ const Home = () => {
             >
                 Toggle Panel View
             </button>)}
+            {finishedRotating &&  isPanelView && (
+                <div
+                    
+                    style={{
+                        position: 'absolute',
+                        bottom: '20%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                        verticalAlign: 'middle',
+                        textAlign: 'center',
+                        padding: '10px 20px',
+                        borderRadius: '10px',
+                        border: 'none',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        backdropFilter: 'blur(10px)'
+                    }}
+                >
+                    Keep Swiping!
+                </div>
+            )}
         </section>
   )
 }
