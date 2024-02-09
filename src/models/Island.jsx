@@ -120,9 +120,9 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
     // Handle keyup events
     const handleKeyUp = (event) => {
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        setIsRotating(false);
-        // Revert to the last panel state
-        setIsPanelView(lastPanelState.current);
+            setIsRotating(false);
+            // Revert to the last panel state
+            setIsPanelView(lastPanelState.current);
         }
     };
 
