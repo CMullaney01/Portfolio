@@ -69,7 +69,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
         const z = center[2] + radius * Math.sin(angle) + 43;
 
         // Calculate the position for the text component (an amount further away from the center)
-        const textOffset = 2.5; // Adjust the offset as needed
+        const textOffset = 4; // Adjust the offset as needed
         const textX = x + textOffset * Math.cos(angle);
         const textZ = z + textOffset * Math.sin(angle);
 
