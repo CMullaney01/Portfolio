@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Clone, useGLTF, Text, Html } from '@react-three/drei';
+import { Clone, useGLTF, Html } from '@react-three/drei';
 import obeliskScene from '../assets/3d/Obelisk.glb';
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber';
