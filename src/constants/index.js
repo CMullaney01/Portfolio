@@ -65,11 +65,24 @@ export const experiences = [
         title: "Toshiba Research Associate",
         company_name: "Toshiba Europe",
         icon: toshiba,
-        iconBg: "#accbe1",
-        date: "February 2022 - June 2023",
+        iconBg: "#b7e4c7",
+        date: "June 2022 - June 2022",
         points: [
-            "Developed Peer-to-Peer (P2P) energy management systems for the Internet of Things (IoT) using Distributed Ledger Technology (DLT), and Electric Vehicles (EVs), resulting in notable publications in IEEE conferences and a pending Patent.",
+            "Worked on wireless connectivity protocols and nRF52840-DK boards to simulate the use of bluetooth as a communication mechanism in real-time environments.",
+            "Integrated moving Electric Vehicles and Certificate Authority-based authentication to secure peer-to-peer energy trading amongst multiple devices",
+            "Leveraged the secure infrastructure to improve trading efficiency by employing LSTM deep neural networks for load forecasting, culminating in a published paper.",
             "Published paper: Efficient and Secure Energy Trading with Electric Vehicles and Distributed Ledger Technology in IEEE VCC 2023",
+            
+        ],
+    },
+    {
+        title: "Toshiba Research Intern",
+        company_name: "Toshiba Europe",
+        icon: toshiba,
+        iconBg: "#accbe1",
+        date: "February 2022 - June 2022",
+        points: [
+            "Developed Peer-to-Peer (P2P) energy management systems for the Internet of Things (IoT) using Distributed Ledger Technology (DLT), resulting in a publication in an IEEE conference and a pending Patent.",
             "Published paper: Peer-to-Peer Energy Trading meets IOTA: Toward a Scalable, Low-Cost, and Efficient Trading System in IEEE/ACM UCC 2022:",
         ],
     },
@@ -85,9 +98,9 @@ export const experiences = [
     },
     {
         title: "Operations Associate",
-        company_name: "Shopify",
+        company_name: "Amazon Warehouse",
         icon: amazon,
-        iconBg: "#b7e4c7",
+        iconBg: "#a2d2ff",
         date: "May 2020 - August 2020",
         points: [
             "Promoted to a key role in managing the operations of the Amazon distribution center. Responsible for Sortation Associates and Flex Delivery Drivers, ensuring efficient routing of undelivered packages and implementing solutions for missing and damaged packages.",
