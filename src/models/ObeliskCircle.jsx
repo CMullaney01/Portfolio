@@ -124,13 +124,13 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             key={i}
             scale={1}
             rotation={[0, rotationY + Math.PI / 2, 0]}
-            position={[textX, 8 * scale[1], textZ]}
+            position={[textX, 9 * scale[1], textZ]}
             transform
             occlude
             fullscreen
             style={{
                 width: "1500px",
-                height: "2100px",
+                height: "1800px",
                 // backgroundColor: "#454545",
                 display: "grid",
                 placeContent: "center"
@@ -139,7 +139,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             <div
                 style={{
                     position: 'absolute',
-                    top: '10%',
+                    top: '15%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
@@ -162,7 +162,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             <div
                 style={{
                     position: 'absolute',
-                    top: '55%', // Adjusted top position to appear below the first div
+                    top: '65%', // Adjusted top position to appear below the first div
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '1500px', // Set width to 100 pixels
