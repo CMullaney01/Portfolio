@@ -89,7 +89,6 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         // Update the reference for the last clientX position
         lastX.current = clientX;
 
-        // Update the rotation speed
         rotationSpeed.current = delta * 0.01 * Math.PI;
         }
     };
@@ -102,9 +101,6 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
             lastPanelState.current = isPanelView;
         };
         setFinishedRotating(false);
-        // Store the current isPanelView state for reference
-
-        // Set isPanelView to false
 
         islandRef.current.rotation.y += 0.005 * Math.PI;
         rotationSpeed.current = 0.0125;
@@ -118,10 +114,6 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         islandRef.current.rotation.y -= 0.005 * Math.PI;
         rotationSpeed.current = -0.0125;
         }
-
-        // Store the current isPanelView state for reference
-
-        // Set isPanelView to false
         setIsPanelView(false);
     };
 
@@ -153,7 +145,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
         };
     }, [gl, handlePointerDown, handlePointerUp, handlePointerMove]);
 
-    // This function is called on each frame update
+    
     const additionalRotation = 2 * Math.PI / 3;
     const rotation0 = [0, 4.7, 0];
     const rotation1 = [0,2.6,0]
@@ -221,7 +213,7 @@ const Island = ({ isRotating, position, setIsRotating, setCurrentStage, obeliskR
     });
 
     // need to trigger stars to load on mount
-    const [triggerUpdate, setTriggerUpdate] = useState(false); // State to trigger update
+    const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     useEffect(() => {
         // Update the state to trigger a quick update

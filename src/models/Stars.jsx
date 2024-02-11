@@ -42,10 +42,10 @@ const useStars = (numStars) => {
     useEffect(() => {
         for (let i = 0; i < numStars; i++) {
             // Random positions within a smaller range to reduce height and spread
-            const x = Math.random() * 300 - 150; // Random x position within range [-150, 150]
-            const y = Math.random() * 100 + 50; // Random y position within range [50, 100] (lower height)
-            const z = Math.random() * 300 - 150; // Random z position within range [-150, 150]
-            const color = new THREE.Color(0xffffff); // White color for now, can be adjusted
+            const x = Math.random() * 300 - 150;
+            const y = Math.random() * 100 + 50;
+            const z = Math.random() * 300 - 150;
+            const color = new THREE.Color(0xffffff);
 
             stars.current.push({ key: i, position: [x, y, z], color });
         }

@@ -32,14 +32,12 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             if (child.isMesh) {
                 child.material.transparent = true;
                 child.material.opacity = isPanelView ? 0.8 : 0.2;
-                child.material.reflectivity = 1; // Set the reflectivity to make it look like glass
-                child.material.refractionRatio = 0.98; // Set the refraction ratio for glass-like effect
-                child.material.envMapIntensity = 1; // Set environment map intensity
-        
-                // Adjust the color, roughness, and metalness for a better glass effect
-                child.material.color = new THREE.Color(1, 1, 1); // Set color to white (optional)
-                child.material.roughness = 0.1; // Adjust roughness for smoothness (optional)
-                child.material.metalness = 0.9; // Adjust metalness for reflectivity (optional)
+                child.material.reflectivity = 1;
+                child.material.refractionRatio = 0.98;
+                child.material.envMapIntensity = 1;
+                child.material.color = new THREE.Color(1, 1, 1);
+                child.material.roughness = 0.1;
+                child.material.metalness = 0.9;
             }
         });
     }, [initialRotation, obeliskGLTF]);
@@ -100,7 +98,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
                         top: '10%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)', // More frosted glass effect
+                        backgroundColor: 'rgba(255, 255, 255, 0.3)',
                         verticalAlign: 'middle',
                         textAlign: 'center',
                         padding: '10px 20px',
@@ -142,7 +140,7 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
                     top: '15%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
                     verticalAlign: 'middle',
                     textAlign: 'center',
                     padding: '10px 30px',
@@ -162,14 +160,14 @@ const ObeliskCircle = ({ center, radius, scale, initialRotation, isPanelView, fi
             <div
                 style={{
                     position: 'absolute',
-                    top: '65%', // Adjusted top position to appear below the first div
+                    top: '65%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '1500px', // Set width to 100 pixels
-                    height: '1100px', // Set height to 100 pixels
-                    backgroundColor: 'rgba(255, 255, 255, 0.5)', // More frosted glass effect
+                    width: '1500px',
+                    height: '1100px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
                     textAlign: 'center',
-                    padding: '20px', // Adjusted padding for a narrower div
+                    padding: '20px',
                     borderRadius: '60px',
                     // border: '10px solid #FFA500', // Border around the second div
                     color: 'rgb(25, 25, 112)',
