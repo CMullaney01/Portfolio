@@ -27,7 +27,7 @@ const Home = () => {
             setCameraPosition([-0, 0, 5]); // Default position
         } else {
             if (window.innerWidth < 768) {
-                setCameraPosition([-0.3, -9, -7])
+                setCameraPosition([-0.6, -9, -7])
             } else {
                 setCameraPosition([-0, -9, -10]); // Panel position
             }
