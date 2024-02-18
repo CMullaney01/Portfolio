@@ -14,6 +14,7 @@ import * as THREE from "three";
 import islandScene from '../assets/3d/IslandV7.glb'
 import { NightSky } from "./Stars";
 
+preload = useGLTF.preload(islandScene)
 // Preload texture
 const textureFabric = new THREE.TextureLoader().load(fabric);
 
