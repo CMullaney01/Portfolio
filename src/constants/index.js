@@ -118,12 +118,12 @@ export const socialLinks = [
     {
         name: 'GitHub',
         iconUrl: github,
-        link: 'https://github.com/YourGitHubUsername',
+        link: 'https://github.com/CMullaney01?tab=repositories',
     },
     {
         name: 'LinkedIn',
         iconUrl: linkedin,
-        link: 'https://www.linkedin.com/in/YourLinkedInUsername',
+        link: 'https://www.linkedin.com/in/conor-mullaney01/',
     }
 ];
 
@@ -146,8 +146,8 @@ export const projects = [
         iconUrl: server,
         theme: 'btn-back-green',
         name: 'File Server',
-        description: 'Currently developing a Golang-based File Transfer Server for secure storage and retrieval, employing HTTP/HTTPS protocols and a React web app interface.',
-        link: 'https://github.com/CMullaney01/FileServer',
+        description: 'Currently developing a Cloud-based File Transfer Server for secure storage and retrieval, employing a React web app interface, golang REST API and keycloak authentication.',
+        link: 'https://github.com/CMullaney01/Cloud_FileServer',
     },
     {
         iconUrl: brain,
